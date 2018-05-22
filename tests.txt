@@ -15,5 +15,13 @@ i is "hu ygyug9797979 989898 uy r".
 me say "huebr".
 
 me repeat duck in ducks:
-
+i is no good.
+i is String with value of "80".
+me say duck.
 me stop repeating.
+
+me check if good then:
+
+otherwise, me do:
+
+me stop checking.

@@ -6,7 +6,7 @@ StatementList = statements: Statement* {
 
 Statement = LineStatement / BlockStatement;
 
-BlockStatement = LoopStatement;
+BlockStatement = LoopStatement / IfBlock;
 
 LineStatement = head: StatementBody tail:("." _) {
   return head + ";";
@@ -15,10 +15,16 @@ LineStatement = head: StatementBody tail:("." _) {
 StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment);
 
 LoopStatement = Forloop
+
+IfBlock = "me check if" _ Condition _ "then:" _ StatementList _ (ElseIfBlock / ElseBlock)? _ "me stop checking.";
+ElseBlock = "otherwise, me do:" _ StatementList;
+ElseIfBlock = "me also check" _ Condition _ "then:" _ StatementList _ (ElseIfBlock / ElseBlock);
+Condition = Boolean;
+
 Forloop = "me repeat" _ newVar: VariableName _ "in" _ listVar: VariableName _ ":" _ sList: StatementList _ "me stop repeating." _ {
   return "for (" + newVar + " : " + listVar + ") {\r\n" +
       sList +
-      "}";
+      "\r\n}";
 }
 
 PrintStatement = _ line: ("me say fast" / "me say") _ val: VariableValue {
