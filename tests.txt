@@ -1,3 +1,11 @@
+me check if no good then:
+d is dog.
+otherwise, me do:
+
+me stop checking.
+me check if good then:
+me stop checking.
+
 i is int with value of 30.
 
 i is int with value of ass.
@@ -10,7 +18,7 @@ i is i$7iiu.
 i is no good.
 i is String with value of "80".
 
-i is "hu ygyug9797979 989898 uy r".
+i is "hu ygyug9797979 989898 uy r test  wierd string2#@#$@#$23$%@#$@##@$@#$@#$% [][]]]]]" + "asd".
 
 me say "huebr".
 
@@ -19,9 +27,3 @@ i is no good.
 i is String with value of "80".
 me say duck.
 me stop repeating.
-
-me check if good then:
-
-otherwise, me do:
-
-me stop checking.

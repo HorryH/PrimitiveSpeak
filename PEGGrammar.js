@@ -1,6 +1,6 @@
 // Ooga grammar to be parsed into Java
 
-StatementList = statements: Statement* {
+StatementList = _ statements: Statement* {
   return statements.join("\r\n");
 }
 
@@ -8,7 +8,7 @@ Statement = LineStatement / BlockStatement;
 
 BlockStatement = LoopStatement / IfBlock;
 
-LineStatement = head: StatementBody tail:("." _) {
+LineStatement = head: StatementBody ("." _) {
   return head + ";";
 }
 
@@ -16,9 +16,15 @@ StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment);
 
 LoopStatement = Forloop
 
-IfBlock = "me check if" _ Condition _ "then:" _ StatementList _ (ElseIfBlock / ElseBlock)? _ "me stop checking.";
-ElseBlock = "otherwise, me do:" _ StatementList;
-ElseIfBlock = "me also check" _ Condition _ "then:" _ StatementList _ (ElseIfBlock / ElseBlock);
+IfBlock = "me check if" _ cond: Condition _ "then:" _ sList: StatementList _ nextBlock: (ElseIfBlock / ElseBlock / _)? _ "me stop checking." _ {
+	return "if (" + cond + ") {\r\n" + sList + "\r\n}" + nextBlock;
+}
+ElseBlock = "otherwise, me do:" _ sList: StatementList {
+	return " else {\r\n" + sList + "\r\n}";
+}
+ElseIfBlock = "me also check" _ cond: Condition _ "then:" _ sList: StatementList _ tailBlock: (ElseIfBlock / ElseBlock / _) {
+	return " else if (" + cond + ") {\r\n" + sList + "\r\n}" + tailBlock;
+}
 Condition = Boolean;
 
 Forloop = "me repeat" _ newVar: VariableName _ "in" _ listVar: VariableName _ ":" _ sList: StatementList _ "me stop repeating." _ {
@@ -52,7 +58,7 @@ String = val: [^'"']* { return val.join("") }
 VariableName = val: ([a-zA-Z_$0-9]*) { return val.join("") }
 
 Literal = StringLiteral;
-StringLiteral = '"' val: String '"' { return '"' + val + '"' }
+StringLiteral = '"' val: String '"' (_ "+" _ StringLiteral)* { return '"' + val + '"' }
 
 VariableType = (_ ("int"/"boolean"/"byte"/"long"/"char"/"short"/"String") _);
 
