@@ -1,0 +1,19 @@
+i is int with value of 30.
+
+i is int with value of ass.
+i is int with value of good.
+i is int with value of no good.
+i is int.
+
+i is i$7iiu.
+
+i is no good.
+i is String with value of "80".
+
+i is "hu ygyug9797979 989898 uy r".
+
+me say "huebr".
+
+me repeat duck in ducks:
+
+me stop repeating.
