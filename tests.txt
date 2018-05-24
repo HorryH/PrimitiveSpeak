@@ -3,7 +3,7 @@ d is dog.
 otherwise, me do:
 
 me stop checking.
-me check if good then:
+me check if good is good and il or il is er then:
 me stop checking.
 
 i is int with value of 30.

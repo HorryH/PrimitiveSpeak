@@ -25,7 +25,7 @@ ElseBlock = "otherwise, me do:" _ sList: StatementList {
 ElseIfBlock = "me also check" _ cond: Condition _ "then:" _ sList: StatementList _ tailBlock: (ElseIfBlock / ElseBlock / _) {
 	return " else if (" + cond + ") {\r\n" + sList + "\r\n}" + tailBlock;
 }
-Condition = Boolean;
+Condition = Expression;
 
 Forloop = "me repeat" _ newVar: VariableName _ "in" _ listVar: VariableName _ ":" _ sList: StatementList _ "me stop repeating." _ {
   return "for (" + newVar + " : " + listVar + ") {\r\n" +
@@ -49,6 +49,11 @@ return middle[1] + " " + head[0] + " = " + init;
 Initializer = _ "with value of" _ body: VariableValue {
   return body;
 }
+
+Expression = OrExpression;
+OrExpression = AndExpression _ ("or" _ AndExpression)*;
+AndExpression = EqualsExpression _ ("and" _ EqualsExpression)*;
+EqualsExpression = VariableValue _ ("is" _ VariableValue)?;
 
 Integer = val: ([0-9]+) { return val.join("") }
 Decimal = val: ([0-9]+ "." [0-9]+) { return val.join("") }
