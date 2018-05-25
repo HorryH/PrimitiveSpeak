@@ -37,7 +37,7 @@ PrintStatement = _ line: ("me say fast" / "me say") _ val: VariableValue {
   return (line != "me say fast" ? "System.out.println(" : "System.out.print(") + val + ")";
 }
 
-VariableAssignment = head: VariableName (_"is"_) tail: VariableValue? {
+VariableAssignment = head: VariableName (_"is"_) tail: (MathematicalExpression / VariableValue)? {
   return head + " = " + tail;
 }
 
@@ -54,6 +54,10 @@ Expression = OrExpression;
 OrExpression = AndExpression _ ("or" _ AndExpression)*;
 AndExpression = EqualsExpression _ ("and" _ EqualsExpression)*;
 EqualsExpression = VariableValue _ ("is" _ VariableValue)?;
+
+MathematicalExpression = Sum;
+Sum = Product _ (("plus" / "take away") _ Product)*;
+Product = VariableValue _ (("times" / "split by") _ VariableValue)*;
 
 Integer = val: ([0-9]+) { return val.join("") }
 Decimal = val: ([0-9]+ "." [0-9]+) { return val.join("") }
