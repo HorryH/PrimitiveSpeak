@@ -17,13 +17,13 @@ StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment);
 LoopStatement = Forloop
 
 IfBlock = "me check if" _ cond: Condition _ "then:" _ sList: StatementList _ nextBlock: (ElseIfBlock / ElseBlock / _)? _ "me stop checking." _ {
-	return "if (" + cond + ") {\r\n" + sList + "\r\n}" + nextBlock;
+  return "if (" + cond + ") {\r\n" + sList + "\r\n}" + nextBlock;
 }
 ElseBlock = "otherwise, me do:" _ sList: StatementList {
-	return " else {\r\n" + sList + "\r\n}";
+  return " else {\r\n" + sList + "\r\n}";
 }
 ElseIfBlock = "me also check" _ cond: Condition _ "then:" _ sList: StatementList _ tailBlock: (ElseIfBlock / ElseBlock / _) {
-	return " else if (" + cond + ") {\r\n" + sList + "\r\n}" + tailBlock;
+  return " else if (" + cond + ") {\r\n" + sList + "\r\n}" + tailBlock;
 }
 Condition = Expression;
 
@@ -56,8 +56,12 @@ AndExpression = EqualsExpression _ ("and" _ EqualsExpression)*;
 EqualsExpression = VariableValue _ ("is" _ VariableValue)?;
 
 MathematicalExpression = Sum;
-Sum = Product _ (("plus" / "take away") _ Product)*;
-Product = VariableValue _ (("times" / "split by") _ VariableValue)*;
+Sum = head: Product _ tail: (("plus" / "take away") _ Product)* {
+  return head[0] + tail.map(e => (e[0] === "plus" ? " + " : " - ") + e[2]).join("");
+}
+Product = head: VariableValue _ tail: (("times" / "split by") _ VariableValue)* {
+  return head[0] + tail.map(e => (e[0] === "times" ? " * " : " / ") + e[2]).join("");
+}
 
 Integer = val: ([0-9]+) { return val.join("") }
 Decimal = val: ([0-9]+ "." [0-9]+) { return val.join("") }
