@@ -12,11 +12,13 @@ i is int with value of ass.
 i is int with value of good.
 i is int with value of no good.
 i is int.
+me check if pasd is good then:
+me stop checking.
 
 i is 4 split by 5 plus 4 split by ie.
-i is wer plus 4 plus qwe plus 4 times 4 plus qwe.
+i is wer plus 4 plus qwe plus 4 plus qwe.
 
-i is asd plus 5 plus 5 plus 5 take away 5 times 5 take away 5.
+i is asd plus 5 plus 5 plus 5.
 
 i is i$7iiu.
 

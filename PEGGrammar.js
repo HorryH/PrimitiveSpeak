@@ -51,9 +51,15 @@ Initializer = _ "with value of" _ body: VariableValue {
 }
 
 Expression = OrExpression;
-OrExpression = AndExpression _ ("or" _ AndExpression)*;
-AndExpression = EqualsExpression _ ("and" _ EqualsExpression)*;
-EqualsExpression = VariableValue _ ("is" _ VariableValue)?;
+OrExpression = head: AndExpression _ tail: ("or" _ AndExpression)* {
+  return head + tail.map(e => " || " + e[2]).join("");
+}
+AndExpression = head: EqualsExpression _ tail: ("and" _ EqualsExpression)* {
+  return head + tail.map(e => " && " + e[2]).join("");
+}
+EqualsExpression = head: VariableValue _ tail: ("is" _ VariableValue)? {
+  return head + (tail ? " == " + tail[2] : "");
+}
 
 MathematicalExpression = Sum;
 Sum = head: Product _ tail: (("plus" / "take away") _ Product)* {
