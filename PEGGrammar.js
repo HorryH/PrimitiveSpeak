@@ -37,13 +37,13 @@ PrintStatement = _ line: ("me say fast" / "me say") _ val: VariableValue {
   return (line != "me say fast" ? "System.out.println(" : "System.out.print(") + val + ")";
 }
 
-VariableAssignment = head: VariableName (_"is"_) tail: (MathematicalExpression / VariableValue)? {
+VariableAssignment = head: VariableName _ "is" _ tail: (MathematicalExpression / VariableValue)? {
   return head + " = " + tail;
 }
 
-VariableDeclaration = head: VariableName (_"is"_) middle: (VariableType) init:Initializer? {
-  if (!init) return middle[1] + " " + head[0];
-return middle[1] + " " + head[0] + " = " + init;
+VariableDeclaration = head: VariableName _ "is" _ middle: (VariableType) init:Initializer? {
+  if (!init) return middle + " " + head;
+return middle + " " + head + " = " + init;
 }
 
 Initializer = _ "with value of" _ body: VariableValue {
@@ -74,12 +74,17 @@ Decimal = val: ([0-9]+ "." [0-9]+) { return val.join("") }
 Character = val: ("'" . "'") { return val.join("") };
 Boolean = fal: ("no" _)? tru: "good" { return fal ? "false" : "true" }
 String = val: [^'"']* { return val.join("") }
-VariableName = val: ([a-zA-Z_$0-9]*) { return val.join("") }
+VariableName = val: ([a-zA-Z_$0-9]*) arr: (_ "at" _ VariableName)? { return val.join("") + (arr ? "[" + arr[3] + "]": "") }
 
-Literal = StringLiteral;
+Literal = StringLiteral / ArrayLiteral;
 StringLiteral = '"' val: String '"' (_ "+" _ StringLiteral)* { return '"' + val + '"' }
+ArrayLiteral = "{" head: VariableValue tail: ("," _ VariableValue)* "}" {
+  return "{" + head + tail.map(e => { return ", " + e[2] }).join("") + "}";
+}
 
-VariableType = (_ ("int"/"boolean"/"byte"/"long"/"char"/"short"/"String") _);
+VariableType = head: ("int"/"boolean"/"byte"/"long"/"char"/"short"/"String") tail:(" array")? {
+  return head + (tail ? "[]" : "");
+};
 
 VariableValue = Literal / Decimal / Integer / Character / Boolean / VariableName;
 

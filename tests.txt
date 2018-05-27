@@ -8,7 +8,7 @@ me stop checking.
 
 i is int with value of 30.
 
-i is int with value of ass.
+ii is int with value of apopo.
 i is int with value of good.
 i is int with value of no good.
 i is int.
@@ -34,3 +34,7 @@ i is no good.
 i is String with value of "80".
 me say duck.
 me stop repeating.
+
+arr is int array with value of {3, 4, 5}.
+arr at 1 is 3.
+arr at i is 4.
