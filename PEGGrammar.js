@@ -6,7 +6,7 @@ StatementList = _ statements: Statement* {
 
 Statement = LineStatement / BlockStatement;
 
-BlockStatement = LoopStatement / IfBlock;
+BlockStatement = LoopStatement / IfBlock / MethodDeclaration;
 
 LineStatement = head: StatementBody ("." _) {
   return head + ";";
@@ -46,6 +46,18 @@ VariableDeclaration = head: VariableName _ "is" _ middle: (VariableType) init:In
 return middle + " " + head + " = " + init;
 }
 
+MethodDeclaration = MethodSigniture _ StatementList _ MethodTail;
+
+MethodSigniture = "me have tool named " VariableName
+" that uses " ArgumentList
+" and produces " VariableType _ ":";
+ArgumentList = aList: (_ VariableName _ "(" VariableType ")")*
+
+MethodTail = "me stop tool." _ {
+  var s = "{}"; //Hacky
+  return "\r\n" + s[1];
+}
+
 Initializer = _ "with value of" _ body: VariableValue {
   return body;
 }
@@ -76,7 +88,7 @@ Boolean = fal: ("no" _)? tru: "good" { return fal ? "false" : "true" }
 String = val: [^'"']* { return val.join("") }
 VariableName = val: ([a-zA-Z_$0-9]*) arr: (_ "at" _ VariableName)? { return val.join("") + (arr ? "[" + arr[3] + "]": "") }
 
-Literal = StringLiteral / ArrayLiteral;
+    Literal = StringLiteral / ArrayLiteral;
 StringLiteral = '"' val: String '"' (_ "+" _ StringLiteral)* { return '"' + val + '"' }
 ArrayLiteral = "{" head: VariableValue tail: ("," _ VariableValue)* "}" {
   return "{" + head + tail.map(e => { return ", " + e[2] }).join("") + "}";
