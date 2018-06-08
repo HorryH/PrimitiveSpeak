@@ -1,4 +1,10 @@
-// Ooga grammar to be parsed into Java
+Program = methods: MethodDeclaration* _ main: MainMethod {
+  return methods.join("\r\n") + "\r\n" + main;
+}
+
+MainMethod = sl: StatementList {
+  return "public static void main(String[] args) {\r\n" + sl + "\r\n}";
+}
 
 StatementList = _ statements: Statement* {
   return statements.join("\r\n");
@@ -6,13 +12,13 @@ StatementList = _ statements: Statement* {
 
 Statement = LineStatement / BlockStatement;
 
-BlockStatement = LoopStatement / IfBlock / MethodDeclaration;
+BlockStatement = LoopStatement / IfBlock;
 
 LineStatement = head: StatementBody ("." _) {
   return head + ";";
 }
 
-StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment);
+StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment / MethodInvoke);
 
 LoopStatement = Forloop
 
@@ -37,7 +43,7 @@ PrintStatement = _ line: ("me say fast" / "me say") _ val: VariableValue {
   return (line != "me say fast" ? "System.out.println(" : "System.out.print(") + val + ")";
 }
 
-VariableAssignment = head: VariableName _ "is" _ tail: (MathematicalExpression / VariableValue)? {
+VariableAssignment = head: VariableName _ "is" _ tail: (MathematicalExpression / VariableValue) {
   return head + " = " + tail;
 }
 
@@ -46,38 +52,54 @@ VariableDeclaration = head: VariableName _ "is" _ middle: (VariableType) init:In
 return middle + " " + head + " = " + init;
 }
 
-MethodDeclaration = MethodSigniture _ StatementList _ MethodTail;
-
-MethodSigniture = "me have tool named " VariableName
-" that uses " ArgumentList
-" and produces " VariableType _ ":";
-ArgumentList = aList: (_ VariableName _ "(" VariableType ")")*
-
-MethodTail = "me stop tool." _ {
-  var s = "{}"; //Hacky
-  return "\r\n" + s[1];
+MethodDeclaration = sig: MethodSigniture _ ml: StatementList _ mt: MethodTail {
+  return sig + " {\r\n" + ml + "\r\n}\r\n";
 }
+MethodSigniture = "me have tool named " name:VariableName
+" that uses " args: ArgumentList
+" and produces " ret:(VariableType / "void") _ ":" {
+  return "public " + ret + " " + name + "(" + args + ")";
+}
+
+ArgumentList = aList: (_ VariableName _ "(" VariableType ")")* {
+  return aList.map(e=>e[4] + " " + e[1]).join(", ");
+}
+
+MethodTail = "me stop talking about tool." _;
 
 Initializer = _ "with value of" _ body: VariableValue {
   return body;
+}
+MethodInvoke = "me use " v: VariableName list:(" with " ParameterList)? {
+  return v + (list ? "(" + list[1] + ")" : "()");
+}
+
+ParameterList = v: VariableValue vl: (_ "," _ VariableValue)* {
+  return v + vl.map(e=>{return ", " + e[3]});
 }
 
 Expression = OrExpression;
 OrExpression = head: AndExpression _ tail: ("or" _ AndExpression)* {
   return head + tail.map(e => " || " + e[2]).join("");
 }
-AndExpression = head: EqualsExpression _ tail: ("and" _ EqualsExpression)* {
+AndExpression = head: EqualityExpression _ tail: ("and" _ EqualityExpression)* {
   return head + tail.map(e => " && " + e[2]).join("");
 }
-EqualsExpression = head: VariableValue _ tail: ("is" _ VariableValue)? {
-  return head + (tail ? " == " + tail[2] : "");
+EqualityExpression = head: VariableValue _ tail: ((IS / GREATERTHAN / LESSTHAN) _ VariableValue)? {
+  return head + (tail ?  " " + tail[0] + " " + tail[2] : "");
 }
 
-MathematicalExpression = Sum;
+IS = "is" { return "==" }
+GREATERTHAN = "greater than" { return ">" }
+LESSTHAN = "less than" { return "<" }
+
+MathematicalExpression = "think" _ s: Sum {
+  return s;
+}
 Sum = head: Product _ tail: (("plus" / "take away") _ Product)* {
   return head[0] + tail.map(e => (e[0] === "plus" ? " + " : " - ") + e[2]).join("");
 }
-Product = head: VariableValue _ tail: (("times" / "split by") _ VariableValue)* {
+Product = head: MathableValue _ tail: (("times" / "split by") _ MathableValue)* {
   return head[0] + tail.map(e => (e[0] === "times" ? " * " : " / ") + e[2]).join("");
 }
 
@@ -99,6 +121,8 @@ VariableType = head: ("int"/"boolean"/"byte"/"long"/"char"/"short"/"String") tai
 };
 
 VariableValue = Literal / Decimal / Integer / Character / Boolean / VariableName;
+
+MathableValue = Decimal / Integer / Character / VariableName;
 
 _ "whitespace"
     = [ '\t''\n''\r']*

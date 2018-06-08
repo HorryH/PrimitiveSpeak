@@ -1,12 +1,16 @@
-me have tool named sort that uses index(int) ui(String) df(int) and produces int:
-me stop tool.
+me have tool named sort that uses arr(int array) low(int) high(int) and produces void:
+me check if low less than high then:
+me stop checking.
+me stop talking about tool.
 
+me use tool.
+me use sort with sdff, sdf.
 me check if no good then:
 d is dog.
 otherwise, me do:
 
 me stop checking.
-me check if good is good and il or il is er then:
+me check if good is no good and il or il is er then:
 me stop checking.
 
 i is int with value of 30.
@@ -18,16 +22,17 @@ i is int.
 me check if pasd is good then:
 me stop checking.
 
-i is 4 split by 5 plus 4 split by ie.
-i is wer plus 4 plus qwe plus 4 plus qwe.
+i is think 4 split by 5 plus 4 split by ie.
+i is think wer plus 4 plus qwe plus 4 plus qwe.
 
-i is asd plus 5 plus 5 plus 5.
+i is think asd plus 5 plus 5 plus 5.
 
 i is i$7iiu.
 
 i is no good.
 i is String with value of "80".
 
+i is "3343".
 i is "hu ygyug9797979 989898 uy r test  wierd string2#@#$@#$23$%@#$@##@$@#$@#$% [][]]]]]" + "asd".
 
 me say "huebr".
@@ -39,5 +44,6 @@ me say duck.
 me stop repeating.
 
 arr is int array with value of {3, 4, 5}.
+arr is {3, 4, 5}.
 arr at 1 is 3.
 arr at i is 4.
