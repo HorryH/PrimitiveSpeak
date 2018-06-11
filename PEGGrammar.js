@@ -1,5 +1,5 @@
 Program = methods: MethodDeclaration* _ main: MainMethod {
-  return methods.join("\r\n") + "\r\n" + main;
+  return "class Main {\r\n" + methods.join("\r\n") + "\r\n" + main + "\r\n}";
 }
 
 MainMethod = sl: StatementList {
