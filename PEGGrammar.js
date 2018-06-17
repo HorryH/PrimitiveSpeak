@@ -18,7 +18,11 @@ LineStatement = head: StatementBody ("." _) {
   return head + ";";
 }
 
-StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment / MethodInvoke);
+ReturnStatement = "make" _ val: VariableValue {
+  return "return " + val;
+}
+
+StatementBody = (PrintStatement / VariableDeclaration / VariableAssignment / ReturnStatement / MethodInvoke);
 
 LoopStatement = Forloop
 

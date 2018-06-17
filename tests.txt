@@ -1,6 +1,7 @@
 me have tool named sort that uses arr(int array) low(int) high(int) and produces void:
 me check if low less than high then:
 me stop checking.
+make good.
 me stop talking about tool.
 
 me use tool.
