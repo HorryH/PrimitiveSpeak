@@ -5,6 +5,13 @@ make good.
 me stop talking about tool.
 
 me use tool.
+
+me repeat if good:
+i is no good.
+i is String with value of "80".
+me say duck.
+me stop repeating.
+
 me use sort with sdff, sdf.
 me check if no good then:
 d is dog.
